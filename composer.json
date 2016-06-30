@@ -9,7 +9,7 @@
             "email": "jason@pureconcepts.net"
         }
     ],
-    "require-dev": {
+    "require": {
         "phpunit/phpunit": "~4.0"
     },
     "autoload": {
