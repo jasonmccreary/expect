@@ -8,11 +8,13 @@ use PHPUnit_Framework_TestCase;
 
 class ExpectTest extends PHPUnit_Framework_TestCase
 {
-    public function testExpectHelperFunction() {
+    public function testExpectHelperFunction()
+    {
         $this->assertInstanceOf(Expect::class, expect('actual'));
     }
 
-    public function testNot() {
+    public function testNot()
+    {
         $subject = new Expect('actual');
         $this->assertAttributeEquals(false, 'negate', $subject);
 
@@ -23,7 +25,8 @@ class ExpectTest extends PHPUnit_Framework_TestCase
         $this->assertAttributeEquals(false, 'negate', $subject);
     }
 
-    public function testNotIsFluent() {
+    public function testNotIsFluent()
+    {
         $subject = new Expect('actual');
         $this->assertInstanceOf(Expect::class, $subject->not());
     }
