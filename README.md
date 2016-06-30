@@ -55,12 +55,12 @@ expect($value)->not()->toBeNull();
 Install Expect as a **development** dependency to your project using [Composer](https://getcomposer.org):
 
 ```sh
-composer require --dev pureconcepts/expect
+composer require --dev jasonmccreary/expect
 ```
 
 ## Usage
 
-Expect can be used within other PHP testing frameworks or as a stand-alone.
+Expect is used by [PSpec](https://github.com/jasonmccreary/pspec), but can be used within other PHP testing frameworks or as a stand-alone.
 
 ## Documentation
 
