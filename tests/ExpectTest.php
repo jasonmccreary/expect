@@ -88,11 +88,11 @@ class ExpectTest extends PHPUnit_Framework_TestCase
         expect(true)->toBeTruthy();
         expect(1)->toBeTruthy();
         expect('anything')->toBeTruthy();
-        expect([1, 2, 3])->toBeTruthy();
+        expect(array(1, 2, 3))->toBeTruthy();
         expect(false)->not()->toBeTruthy();
         expect(0)->not()->toBeTruthy();
         expect('')->not()->toBeTruthy();
-        expect([])->not()->toBeTruthy();
+        expect(array())->not()->toBeTruthy();
     }
 
     public function testToBeFalse()
