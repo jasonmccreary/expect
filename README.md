@@ -1,107 +1,75 @@
-Verify
-======
-
-BDD Assertions for [PHPUnit][1] and [Codeception][2]
-
-This is very tiny wrapper for PHPUnit assertions, that are aimed to make tests a bit more readable.
-With [BDD][3] assertions influenced by [Chai][4], [Jasmine][5], and [RSpec][6] your assertions would be a bit closer to natural language.
+# Expect
 
 [![Build Status](https://travis-ci.org/Codeception/Verify.png?branch=master)](https://travis-ci.org/Codeception/Verify) [![Latest Stable Version](https://poser.pugx.org/codeception/verify/v/stable.png)](https://packagist.org/packages/codeception/verify)
 
+Expect is a BDD-style assertion library for PHP - allowing you to express expectations using a natural, fluent interface.
+
 ```php
-$user = User::find(1);
+// equality
+expect(1)->toEqual('1');
+expect(2)->toBe(2);
 
-// equal
-verify($user->getName())->equals('davert');
-verify("user have 5 posts", $user->getNumPosts())->equals(5);
-verify($user->getNumPosts())->notEquals(3);
-
-// contains
-verify('first user is admin', $user->getRoles())->contains('admin');
-verify("first user is not banned", $user->getRoles())->notContains('banned');
-
-// greater / less
-$rate = $user->getRate();
-verify('first user rate is 7', $rate)->equals(7);
-
-verify($rate)->greaterThan(5);
-verify($rate)->lessThan(10);
-verify($rate)->lessOrEquals(7);
-verify($rate)->lessOrEquals(8);
-verify($rate)->greaterOrEquals(7);
-verify($rate)->greaterOrEquals(5);
+// comparison
+expect(5)->toBeLessThan(7);
+expect(5)->toBeLessThanOrEqualTo(5);
+expect(5)->toBeGreaterThan(4);
+expect(5)->toBeGreaterThanOrEqualTo(5);
 
 // true / false / null
-verify($user->isAdmin())->true();
-verify($user->isBanned())->false();
-verify($user->invitedBy)->null();
-verify($user->getPosts())->notNull();
+expect(true)->toBeTrue();
+expect('1')->toBeTruthy();
+expect(false)->toBeFalse();
+expect('0')->toBeFalsy();
+expect(null)->toBeNull();
 
-// empty
-verify($user->getComments())->isEmpty();
-verify($user->getRoles())->notEmpty();
-```
+// strings
+expect('string')->toContain('in');
+expect('string')->toStartWith('str');
+expect('string')->toEndWith('ing');
+expect('string')->toHaveLength(6);
+expect('string')->toMatchPattern('/string/');
+expect('string')->toMatchFormat('%s');
 
-Shorthands for testing truth/fallacy:
+// arrays
+expect(['a', 'b', 'c'])->toHaveCount(3);
+expect(['a', 'b', 'c'])->toContain('a');
+expect(['key' => 'value'])->toHaveKey('key');
 
-```php
-verify_that($user->isActivated());
-verify_not($user->isBanned());
-```
+// types
+expect(1)->toBeType('int');
+expect(new Example())->toBeInstanceOf(Example::class);
+expect('{"key": "value"}')->toBeJson();
+expect('<key>value</key>')->toBeXml();
 
-This 2 functions doesn't check for strict true/false matching, rather `empty` function is used.
-`verify_that` checks that result is not empty value, `verify_not` does the opposite.
+// files
+expect('file.txt')->toExist();
 
-## Alternative Syntax
-
-If you follow TDD/BDD you'd rather use `expect` instead of `verify`. Which is just an alias functions:
-
-```php
-expect("user have 5 posts", $user->getNumPosts())->equals(5);
-expect_that($user->isActive());
-expect_not($user->isBanned());
+// negation
+expect(1)->not()->toEqual(2);
+expect(true)->not()->toBeFalse();
+expect($value)->not()->toBeNull();
 ```
 
 ## Installation
 
-### Installing via Composer
-
-Install composer in a common location or in your project:
+Install Expect as a **development** dependency to your project using [Composer](https://getcomposer.org):
 
 ```sh
-curl -s http://getcomposer.org/installer | php
-```
-
-Create the `composer.json` file as follows:
-
-```json
-"require-dev": {
-    "codeception/verify": "*"
-}
-```
-
-Run the composer installer:
-
-```sh
-php composer.phar install
+composer require --dev pureconcepts/expect
 ```
 
 ## Usage
 
-Use in any test `verify` function instead of `$this->assert*` methods.
+Expect can be used within other PHP testing frameworks or as a stand-alone.
 
-## Extending
+## Documentation
 
-`Codeception\Verify` class can be extended with custom assertions. You write your own `verify` function that would instantiate your extended version of Verify class.
+Documentation and additional examples will be available in the official release.
 
 ## License
 
-Verify is open-sourced software licensed under the [MIT][7] License. © Codeception PHP Testing Framework
+Expect is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
-[1]: https://phpunit.de/
-[2]: http://codeception.com/
-[3]: https://en.wikipedia.org/wiki/Behavior-driven_development
-[4]: http://chaijs.com/
-[5]: http://jasmine.github.io/
-[6]: http://rspec.info/
-[7]: https://github.com/Codeception/Verify/blob/master/LICENSE
+## Thanks
+
+Expect was built atop [Verify](https://github.com/Codeception/Verify) and heavily inspired by [RSpec](https://github.com/rspec/rspec-core) and [Jasmine](https://github.com/jasmine/jasmine). I want to recognize and thank these projects.
