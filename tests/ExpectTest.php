@@ -1,10 +1,6 @@
 <?php
-namespace PSpec\Test;
 
 use PSpec\Expect;
-use DateTime;
-use DOMElement;
-use PHPUnit_Framework_TestCase;
 
 class ExpectTest extends PHPUnit_Framework_TestCase
 {
@@ -147,20 +143,6 @@ class ExpectTest extends PHPUnit_Framework_TestCase
         expect(1)->not()->toBeType('boolean');
     }
 
-    public function testToHaveProperty()
-    {
-        expect(TestClass::class)->toHaveProperty('property');
-        expect(new TestClass())->toHaveProperty('property');
-        expect(TestClass::class)->not()->toHaveProperty('nonexistentProperty');
-        expect(new TestClass())->not()->toHaveProperty('nonexistentProperty');
-    }
-
-    public function testToHaveStaticProperty()
-    {
-        expect(TestClass::class)->toHaveStaticProperty('staticProperty');
-        expect(TestClass::class)->not()->toHaveStaticProperty('nonexistentStaticProperty');
-    }
-
     public function toContainType()
     {
         expect(array('1', '2', '3'))->toContainType('string');
@@ -169,7 +151,7 @@ class ExpectTest extends PHPUnit_Framework_TestCase
 
     public function testToContainInstancesOf()
     {
-        expect(array(new TestClass(), new TestClass()))->toContainInstancesOf(TestClass::class);
+        expect(array(new Exception(), new Exception()))->toContainInstancesOf(Exception::class);
     }
 
     public function testToHaveCount()

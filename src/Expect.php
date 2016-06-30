@@ -198,33 +198,6 @@ class Expect
         }
     }
 
-    // objects
-    public function toHaveProperty($attribute)
-    {
-        if (is_string($this->actual)) {
-            if ($this->negate) {
-                a::assertClassNotHasAttribute($attribute, $this->actual);
-            } else {
-                a::assertClassHasAttribute($attribute, $this->actual);
-            }
-        } else {
-            if ($this->negate) {
-                a::assertObjectNotHasAttribute($attribute, $this->actual);
-            } else {
-                a::assertObjectHasAttribute($attribute, $this->actual);
-            }
-        }
-    }
-
-    public function toHaveStaticProperty($attribute)
-    {
-        if ($this->negate) {
-            a::assertClassNotHasStaticAttribute($attribute, $this->actual);
-        } else {
-            a::assertClassHasStaticAttribute($attribute, $this->actual);
-        }
-    }
-
     // types
     public function toBeType($type)
     {
