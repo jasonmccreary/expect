@@ -14,13 +14,13 @@ class ExpectTest extends PHPUnit_Framework_TestCase
 
     public function testNot() {
         $subject = new Expect('actual');
-        $this->assertAttributeEquals(false, 'invert', $subject);
+        $this->assertAttributeEquals(false, 'negate', $subject);
 
         $subject->not();
-        $this->assertAttributeEquals(true, 'invert', $subject);
+        $this->assertAttributeEquals(true, 'negate', $subject);
 
         $subject->not();
-        $this->assertAttributeEquals(false, 'invert', $subject);
+        $this->assertAttributeEquals(false, 'negate', $subject);
     }
 
     public function testNotIsFluent() {
@@ -84,6 +84,18 @@ class ExpectTest extends PHPUnit_Framework_TestCase
         expect(7)->not()->toBeTrue();
     }
 
+    public function testToBeTruthy()
+    {
+        expect(true)->toBeTruthy();
+        expect(1)->toBeTruthy();
+        expect('anything')->toBeTruthy();
+        expect([1, 2, 3])->toBeTruthy();
+        expect(false)->not()->toBeTruthy();
+        expect(0)->not()->toBeTruthy();
+        expect('')->not()->toBeTruthy();
+        expect([])->not()->toBeTruthy();
+    }
+
     public function testToBeFalse()
     {
         expect(false)->toBeFalse();
@@ -92,24 +104,23 @@ class ExpectTest extends PHPUnit_Framework_TestCase
         expect(null)->not()->toBeFalse();
     }
 
+    public function testToBeFalsy()
+    {
+        expect(array())->toBeFalsy();
+        expect(0)->toBeFalsy();
+        expect('')->toBeFalsy();
+        expect(false)->toBeFalsy();
+        expect(array('3', '5'))->not()->toBeFalsy();
+        expect(true)->not()->toBeFalsy();
+        expect('anything')->not()->toBeFalsy();
+        expect(1)->not()->toBeFalsy();
+    }
+
     public function testToBeNull()
     {
         expect(null)->toBeNull();
         expect('null')->not()->toBeNull();
         expect(false)->not()->toBeNull();
-    }
-
-    public function testToBeEmpty()
-    {
-        expect(array())->toBeEmpty();
-        expect(0)->toBeEmpty();
-        expect('')->toBeEmpty();
-        expect(false)->toBeEmpty();
-        expect(array('3', '5'))->not()->toBeEmpty();
-        expect(true)->not()->toBeEmpty();
-        expect('anything')->not()->toBeEmpty();
-        expect(1)->not()->toBeEmpty();
-
     }
 
     public function testToHaveKey()
@@ -199,6 +210,12 @@ class ExpectTest extends PHPUnit_Framework_TestCase
     {
         expect(1)->toBe(0 + 1);
         expect(1)->not()->toBe(true);
+    }
+
+    public function testToHaveLenth()
+    {
+        expect('string')->toHaveLength(6);
+        expect('string')->not()->toHaveLength(2);
     }
 
     public function testToEndWith()

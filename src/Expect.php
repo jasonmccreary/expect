@@ -22,6 +22,7 @@ class Expect
         return $this;
     }
 
+    // equality
     public function toEqual($expected)
     {
         if ($this->negate) {
@@ -31,15 +32,16 @@ class Expect
         }
     }
 
-    public function toContain($needle)
+    public function toBe($expected)
     {
         if ($this->negate) {
-            a::assertNotContains($needle, $this->actual);
+            a::assertNotSame($expected, $this->actual);
         } else {
-            a::assertContains($needle, $this->actual);
+            a::assertSame($expected, $this->actual);
         }
     }
 
+    // comparison
     public function toBeGreaterThan($expected)
     {
         if ($this->negate) {
@@ -76,6 +78,7 @@ class Expect
         }
     }
 
+    // true / false / null
     public function toBeTrue()
     {
         if ($this->negate) {
@@ -103,12 +106,86 @@ class Expect
         }
     }
 
-    public function toBeEmpty()
+    public function toBeFalsy()
     {
         if ($this->negate) {
             a::assertNotEmpty($this->actual);
         } else {
             a::assertEmpty($this->actual);
+        }
+    }
+
+    public function toBeTruthy()
+    {
+        if ($this->negate) {
+            a::assertEmpty($this->actual);
+        } else {
+            a::assertNotEmpty($this->actual);
+        }
+    }
+
+    // strings
+    public function toHaveLength($length)
+    {
+        if ($this->negate) {
+            a::assertNotSame($length, strlen($this->actual));
+        } else {
+            a::assertSame($length, strlen($this->actual));
+        }
+    }
+
+    public function toStartWith($prefix)
+    {
+        if ($this->negate) {
+            a::assertStringStartsNotWith($prefix, $this->actual);
+        } else {
+            a::assertStringStartsWith($prefix, $this->actual);
+        }
+    }
+
+    public function toEndWith($suffix)
+    {
+        if ($this->negate) {
+            a::assertStringEndsNotWith($suffix, $this->actual);
+        } else {
+            a::assertStringEndsWith($suffix, $this->actual);
+        }
+    }
+
+    public function toMatchFormat($format)
+    {
+        if ($this->negate) {
+            a::assertStringNotMatchesFormat($format, $this->actual);
+        } else {
+            a::assertStringMatchesFormat($format, $this->actual);
+        }
+    }
+
+    public function toMatchPattern($pattern)
+    {
+        if ($this->negate) {
+            a::assertNotRegExp($pattern, $this->actual);
+        } else {
+            a::assertRegExp($pattern, $this->actual);
+        }
+    }
+
+    // arrays
+    public function toHaveCount($count)
+    {
+        if ($this->negate) {
+            a::assertNotCount($count, $this->actual);
+        } else {
+            a::assertCount($count, $this->actual);
+        }
+    }
+
+    public function toContain($needle)
+    {
+        if ($this->negate) {
+            a::assertNotContains($needle, $this->actual);
+        } else {
+            a::assertContains($needle, $this->actual);
         }
     }
 
@@ -121,24 +198,7 @@ class Expect
         }
     }
 
-    public function toBeInstanceOf($class)
-    {
-        if ($this->negate) {
-            a::assertNotInstanceOf($class, $this->actual);
-        } else {
-            a::assertInstanceOf($class, $this->actual);
-        }
-    }
-
-    public function toBeType($type)
-    {
-        if ($this->negate) {
-            a::assertNotInternalType($type, $this->actual);
-        } else {
-            a::assertInternalType($type, $this->actual);
-        }
-    }
-
+    // objects
     public function toHaveProperty($attribute)
     {
         if (is_string($this->actual)) {
@@ -165,85 +225,22 @@ class Expect
         }
     }
 
-    public function toContainType($type)
+    // types
+    public function toBeType($type)
     {
         if ($this->negate) {
-            a::assertNotContainsOnly($type, $this->actual);
+            a::assertNotInternalType($type, $this->actual);
         } else {
-            a::assertContainsOnly($type, $this->actual);
+            a::assertInternalType($type, $this->actual);
         }
     }
 
-    public function toContainInstancesOf($class)
-    {
-        a::assertContainsOnlyInstancesOf($class, $this->actual);
-    }
-
-    public function toHaveCount($count)
+    public function toBeInstanceOf($class)
     {
         if ($this->negate) {
-            a::assertNotCount($count, $this->actual);
+            a::assertNotInstanceOf($class, $this->actual);
         } else {
-            a::assertCount($count, $this->actual);
-        }
-    }
-
-    public function toHaveXmlStructure($xml, $checkAttributes = false)
-    {
-        a::assertEqualXMLStructure($xml, $this->actual, $checkAttributes);
-    }
-
-    public function toExist()
-    {
-        if ($this->negate) {
-            a::assertFileNotExists($this->actual);
-        } else {
-            a::assertFileExists($this->actual);
-        }
-    }
-
-    public function toMatchPattern($pattern)
-    {
-        if ($this->negate) {
-            a::assertNotRegExp($pattern, $this->actual);
-        } else {
-            a::assertRegExp($pattern, $this->actual);
-        }
-    }
-
-    public function toMatchFormat($format)
-    {
-        if ($this->negate) {
-            a::assertStringNotMatchesFormat($format, $this->actual);
-        } else {
-            a::assertStringMatchesFormat($format, $this->actual);
-        }
-    }
-
-    public function toBe($expected)
-    {
-        if ($this->negate) {
-            a::assertNotSame($expected, $this->actual);
-        } else {
-            a::assertSame($expected, $this->actual);
-        }
-    }
-
-    public function toEndWith($suffix)
-    {
-        if ($this->negate) {
-            a::assertStringEndsNotWith($suffix, $this->actual);
-        } else {
-            a::assertStringEndsWith($suffix, $this->actual);
-        }
-    }
-
-    public function toStartWith($prefix)
-    {
-        if ($this->negate) {
-            a::assertStringStartsNotWith($prefix, $this->actual);
-        } else {
-            a::assertStringStartsWith($prefix, $this->actual);
+            a::assertInstanceOf($class, $this->actual);
         }
     }
 
@@ -260,10 +257,40 @@ class Expect
     {
         try {
             PHPUnit_Util_XML::load($this->actual);
-        } catch(PHPUnit_Framework_Exception $e) {
+        } catch (PHPUnit_Framework_Exception $e) {
             if (!$this->negate) {
                 throw $e;
             }
+        }
+    }
+
+    public function toContainInstancesOf($class)
+    {
+        a::assertContainsOnlyInstancesOf($class, $this->actual);
+    }
+
+    public function toContainType($type)
+    {
+        if ($this->negate) {
+            a::assertNotContainsOnly($type, $this->actual);
+        } else {
+            a::assertContainsOnly($type, $this->actual);
+        }
+    }
+
+    // xml
+    public function toHaveXmlStructure($xml, $checkAttributes = false)
+    {
+        a::assertEqualXMLStructure($xml, $this->actual, $checkAttributes);
+    }
+
+    // files
+    public function toExist()
+    {
+        if ($this->negate) {
+            a::assertFileNotExists($this->actual);
+        } else {
+            a::assertFileExists($this->actual);
         }
     }
 }
