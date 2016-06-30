@@ -160,14 +160,6 @@ class ExpectTest extends PHPUnit_Framework_TestCase
         expect(array(1, 2, 3))->not()->toHaveCount(2);
     }
 
-    public function testToHaveXmlStructure()
-    {
-        $expected = new DOMElement('foo');
-        $actual = new DOMElement('foo');
-
-        expect($expected)->toHaveXmlStructure($actual);
-    }
-
     public function testToExist()
     {
         expect(__FILE__)->toExist();

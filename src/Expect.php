@@ -251,12 +251,6 @@ class Expect
         }
     }
 
-    // xml
-    public function toHaveXmlStructure($xml, $checkAttributes = false)
-    {
-        a::assertEqualXMLStructure($xml, $this->actual, $checkAttributes);
-    }
-
     // files
     public function toExist()
     {
