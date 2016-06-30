@@ -1,10 +1,10 @@
 {
-    "name": "codeception/verify",
-    "description": "BDD assertion library for PHPUnit",
+    "name": "jasonmccreary/expect",
+    "description": "BDD-style assertions for PHP.",
     "authors": [
         {
-            "name": "Michael Bodnarchuk",
-            "email": "davert.php@mailican.com"
+            "name": "Jason McCreary",
+            "email": "jason@pureconcepts.net"
         }
     ],
     "require-dev": {
