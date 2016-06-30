@@ -15,7 +15,8 @@
             "src/functions.php"
         ],
         "psr-4": {
-            "PSpec\\": "src"
+            "PSpec\\": "src",
+            "PSpec\\Test\\": "tests"
         }
     }
 }

@@ -1,180 +1,221 @@
 <?php
-namespace PSpec;
+namespace PSpec\Test;
 
+use PSpec\Expect;
 use DateTime;
-use DOMDocument;
 use DOMElement;
 use PHPUnit_Framework_TestCase;
 
-class ExpectTest extends PHPUnit_Framework_TestCase {
-
-    protected $xml;
-
-    protected function setUp()
-    {
-        $this->xml = new DomDocument;
-        $this->xml->loadXML('<foo><bar>Baz</bar><bar>Baz</bar></foo>');
+class ExpectTest extends PHPUnit_Framework_TestCase
+{
+    public function testExpectHelperFunction() {
+        $this->assertInstanceOf(Expect::class, expect('actual'));
     }
-    public function testEquals()
+
+    public function testNot() {
+        $subject = new Expect('actual');
+        $this->assertAttributeEquals(false, 'invert', $subject);
+
+        $subject->not();
+        $this->assertAttributeEquals(true, 'invert', $subject);
+
+        $subject->not();
+        $this->assertAttributeEquals(false, 'invert', $subject);
+    }
+
+    public function testNotIsFluent() {
+        $subject = new Expect('actual');
+        $this->assertInstanceOf(Expect::class, $subject->not());
+    }
+
+    public function testToEqual()
     {
         expect(5)->toEqual(5);
+        expect(5)->not()->toEqual(3);
         expect("hello")->toEqual("hello");
-        expect(5)->toEqual(5);
-        expect(3)->notEquals(5);
+        expect("hello")->not()->toEqual("goodbye");
+        expect(true)->toEqual(true);
+        expect(true)->not()->toEqual(false);
     }
 
-    public function testContains()
+    public function testToContain()
     {
         expect(array(3, 2))->toContain(3);
-        expect(array(3, 2))->notContains(5);
+        expect(array(3, 2))->not()->toContain(5);
     }
 
-    public function testGreaterLowerThan()
+    public function testToBeGreaterThan()
     {
         expect(7)->toBeGreaterThan(5);
-        expect(7)->toBeLessThan(10);
-        expect(7)->toBeLessThanOrEqualTo(7);
-        expect(7)->toBeLessThanOrEqualTo(8);
+        expect(7)->toBeGreaterThan(6);
+        expect(7)->not()->toBeGreaterThan(7);
+        expect(7)->not()->toBeGreaterThan(8);
+    }
+
+    public function testToBeGreaterThanOrEqualTo()
+    {
+        expect(7)->toBeGreaterThanOrEqualTo(6);
         expect(7)->toBeGreaterThanOrEqualTo(7);
-        expect(7)->toBeGreaterThanOrEqualTo(5);
+        expect(7)->not()->toBeGreaterThanOrEqualTo(8);
+        expect(7)->not()->toBeGreaterThanOrEqualTo(9);
     }
 
-    public function testTrueFalseNull()
+    public function testToBeLessThan()
+    {
+        expect(7)->toBeLessThan(9);
+        expect(7)->toBeLessThan(8);
+        expect(7)->not()->toBeLessThan(7);
+        expect(7)->not()->toBeLessThan(6);
+    }
+
+    public function testToBeLessThanOrEqualTo()
+    {
+        expect(7)->toBeLessThanOrEqualTo(8);
+        expect(7)->toBeLessThanOrEqualTo(7);
+        expect(7)->not()->toBeLessThanOrEqualTo(6);
+        expect(7)->not()->toBeLessThanOrEqualTo(5);
+    }
+
+    public function testToBeTrue()
     {
         expect(true)->toBeTrue();
+        expect(false)->not()->toBeTrue();
+        expect(1)->not()->toBeTrue();
+        expect(7)->not()->toBeTrue();
+    }
+
+    public function testToBeFalse()
+    {
         expect(false)->toBeFalse();
+        expect(true)->not()->toBeFalse();
+        expect(0)->not()->toBeFalse();
+        expect(null)->not()->toBeFalse();
+    }
+
+    public function testToBeNull()
+    {
         expect(null)->toBeNull();
-        expect(true)->notNull();
-        expect(false)->toBeFalse();
-        expect(true)->toBeTrue();
+        expect('null')->not()->toBeNull();
+        expect(false)->not()->toBeNull();
     }
 
-    public function testEmptyNotEmpty()
+    public function testToBeEmpty()
     {
-        expect(array('3', '5'))->notEmpty();
         expect(array())->toBeEmpty();
+        expect(0)->toBeEmpty();
+        expect('')->toBeEmpty();
+        expect(false)->toBeEmpty();
+        expect(array('3', '5'))->not()->toBeEmpty();
+        expect(true)->not()->toBeEmpty();
+        expect('anything')->not()->toBeEmpty();
+        expect(1)->not()->toBeEmpty();
+
     }
 
-    public function testArrayHasKey()
+    public function testToHaveKey()
     {
-        $errors = array('title' => 'You should add title');
-        expect($errors)->toHaveKey('title');
-        expect($errors)->hasntKey('body');
+        expect(array('key' => 'value'))->toHaveKey('key');
+        expect(array())->not()->toHaveKey('key');
     }
 
-    public function testIsInstanceOf()
+    public function testToBeInstanceOf()
     {
         $testClass = new DateTime();
         expect($testClass)->toBeInstanceOf('DateTime');
-        expect($testClass)->isNotInstanceOf('DateTimeZone');
+        expect($testClass)->not()->toBeInstanceOf('DateTimeZone');
     }
 
-    public function testInternalType()
+    public function testToBeType()
     {
-        $testVar = array();
-        expect($testVar)->toBeType('array');
-        expect($testVar)->notInternalType('boolean');
+        expect(array())->toBeType('array');
+        expect(1)->toBeType('int');
+        expect(array())->not()->toBeType('string');
+        expect(1)->not()->toBeType('boolean');
     }
 
-    public function testHasAttribute()
+    public function testToHaveProperty()
     {
-        expect('Exception')->toHaveProperty('message');
-        expect('Exception')->notHasAttribute('fakeproperty');
+        expect(TestClass::class)->toHaveProperty('property');
+        expect(new TestClass())->toHaveProperty('property');
+        expect(TestClass::class)->not()->toHaveProperty('nonexistentProperty');
+        expect(new TestClass())->not()->toHaveProperty('nonexistentProperty');
     }
 
-    public function testHasStaticAttribute()
+    public function testToHaveStaticProperty()
     {
-        expect(\PSpec\FakeClassForTesting::class)->toHaveStaticProperty('staticProperty');
-        expect(\PSpec\FakeClassForTesting::class)->notHasStaticAttribute('fakeProperty');
+        expect(TestClass::class)->toHaveStaticProperty('staticProperty');
+        expect(TestClass::class)->not()->toHaveStaticProperty('nonexistentStaticProperty');
     }
 
-    public function testContainsOnly()
+    public function toContainType()
     {
         expect(array('1', '2', '3'))->toContainType('string');
-        expect(array('1', '2', 3))->notContainsOnly('string');
+        expect(array('1', '2', 3))->not()->toContainType('string');
     }
 
-    public function testContainsOnlyInstancesOf()
+    public function testToContainInstancesOf()
     {
-        expect(array(new FakeClassForTesting(), new FakeClassForTesting(), new FakeClassForTesting()))
-            ->toContainInstancesOf(\PSpec\FakeClassForTesting::class);
+        expect(array(new TestClass(), new TestClass()))->toContainInstancesOf(TestClass::class);
     }
 
-    public function testCount()
+    public function testToHaveCount()
     {
-        expect(array(1,2,3))->toHaveCount(3);
-        expect(array(1,2,3))->notCount(2);
+        expect(array(1, 2, 3))->toHaveCount(3);
+        expect(array(1, 2, 3))->not()->toHaveCount(2);
     }
 
-    public function testEqualXMLStructure()
+    public function testToHaveXmlStructure()
     {
         $expected = new DOMElement('foo');
         $actual = new DOMElement('foo');
 
-        expect($expected)->equalXMLStructure($actual);
+        expect($expected)->toHaveXmlStructure($actual);
     }
 
-    public function testFileExists()
+    public function testToExist()
     {
         expect(__FILE__)->toExist();
-        expect('completelyrandomfilename.txt')->notExists();
+        expect('nonexistent-file.txt')->not()->toExist();
     }
 
-    public function testEqualsJsonFile()
+    public function testToBeJson()
     {
-        expect(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'json-test-file.json')
-            ->toBeJSONFile();
+        expect('{"some" : "data"}')->toBeJson();
+        expect('not:json')->not()->toBeJson();
     }
 
-    public function testEqualsJsonString()
-    {
-        expect('{"some" : "data"}')->toBeJSONString();
-    }
-
-    public function testRegExp()
+    public function testToMatchPattern()
     {
         expect('somestring')->toMatchPattern('/string/');
     }
 
-    public function testMatchesFormat()
+    public function testToMatchFormat()
     {
         expect('somestring')->toMatchFormat('%s');
-        expect('somestring')->notMatchesFormat('%i');
+        expect('somestring')->not()->toMatchFormat('%i');
     }
 
-    public function testSame()
+    public function testToBe()
     {
-        expect(1)->toBe(0+1);
-        expect(1)->notSame(true);
+        expect(1)->toBe(0 + 1);
+        expect(1)->not()->toBe(true);
     }
 
-    public function testEndsWith()
+    public function testToEndWith()
     {
         expect('A completely not funny string')->toEndWith('ny string');
-        expect('A completely not funny string')->notEndsWith('A completely');
+        expect('A completely not funny string')->not()->toEndWith('A completely');
     }
 
-    public function testStartsWith()
+    public function testToStartWith()
     {
         expect('A completely not funny string')->toStartWith('A completely');
-        expect('A completely not funny string')->notStartsWith('string');
+        expect('A completely not funny string')->not()->toStartWith('string');
     }
 
-    public function testEqualsXmlFile()
+    public function testToBeXml()
     {
-        expect(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml')
-            ->toBeXmlFile();
+        expect('<foo><bar>Baz</bar></foo>')->toBeXml();
+        expect('<not>xml')->not()->toBeXml();
     }
-
-    public function testEqualsXmlString()
-    {
-        expect('<foo><bar>Baz</bar><bar>Baz</bar></foo>')->toBeXmlString();
-    }
-}
-
-
-
-class FakeClassForTesting
-{
-    static $staticProperty;
 }

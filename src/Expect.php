@@ -2,153 +2,176 @@
 namespace PSpec;
 
 use PHPUnit_Framework_Assert as a;
+use PHPUnit_Framework_Exception;
 use PHPUnit_Util_XML;
 
 class Expect
 {
     protected $actual = null;
+    protected $negate = false;
 
     public function __construct($actual)
     {
         $this->actual = $actual;
     }
 
-    public function toEqual($expected)
+    public function not()
     {
-        a::assertEquals($expected, $this->actual);
+        $this->negate = !$this->negate;
+
+        return $this;
     }
 
-    public function notEquals($expected)
+    public function toEqual($expected)
     {
-        a::assertNotEquals($expected, $this->actual);
+        if ($this->negate) {
+            a::assertNotEquals($expected, $this->actual);
+        } else {
+            a::assertEquals($expected, $this->actual);
+        }
     }
 
     public function toContain($needle)
     {
-        a::assertContains($needle, $this->actual);
-    }
-
-    public function notContains($needle)
-    {
-        a::assertNotContains($needle, $this->actual);
+        if ($this->negate) {
+            a::assertNotContains($needle, $this->actual);
+        } else {
+            a::assertContains($needle, $this->actual);
+        }
     }
 
     public function toBeGreaterThan($expected)
     {
-        a::assertGreaterThan($expected, $this->actual);
+        if ($this->negate) {
+            a::assertLessThanOrEqual($expected, $this->actual);
+        } else {
+            a::assertGreaterThan($expected, $this->actual);
+        }
     }
 
     public function toBeLessThan($expected)
     {
-        a::assertLessThan($expected, $this->actual);
+        if ($this->negate) {
+            a::assertGreaterThanOrEqual($expected, $this->actual);
+        } else {
+            a::assertLessThan($expected, $this->actual);
+        }
     }
 
     public function toBeGreaterThanOrEqualTo($expected)
     {
-        a::assertGreaterThanOrEqual($expected, $this->actual);
+        if ($this->negate) {
+            a::assertLessThan($expected, $this->actual);
+        } else {
+            a::assertGreaterThanOrEqual($expected, $this->actual);
+        }
     }
 
     public function toBeLessThanOrEqualTo($expected)
     {
-        a::assertLessThanOrEqual($expected, $this->actual);
+        if ($this->negate) {
+            a::assertGreaterThan($expected, $this->actual);
+        } else {
+            a::assertLessThanOrEqual($expected, $this->actual);
+        }
     }
 
     public function toBeTrue()
     {
-        a::assertTrue($this->actual);
+        if ($this->negate) {
+            a::assertNotTrue($this->actual);
+        } else {
+            a::assertTrue($this->actual);
+        }
     }
 
     public function toBeFalse()
     {
-        a::assertFalse($this->actual);
+        if ($this->negate) {
+            a::assertNotFalse($this->actual);
+        } else {
+            a::assertFalse($this->actual);
+        }
     }
 
     public function toBeNull()
     {
-        a::assertNull($this->actual);
-    }
-
-    public function notNull()
-    {
-        a::assertNotNull($this->actual);
+        if ($this->negate) {
+            a::assertNotNull($this->actual);
+        } else {
+            a::assertNull($this->actual);
+        }
     }
 
     public function toBeEmpty()
     {
-        a::assertEmpty($this->actual);
-    }
-
-    public function notEmpty()
-    {
-        a::assertNotEmpty($this->actual);
+        if ($this->negate) {
+            a::assertNotEmpty($this->actual);
+        } else {
+            a::assertEmpty($this->actual);
+        }
     }
 
     public function toHaveKey($key)
     {
-        a::assertArrayHasKey($key, $this->actual);
-    }
-
-    public function hasntKey($key)
-    {
-        a::assertArrayNotHasKey($key, $this->actual);
+        if ($this->negate) {
+            a::assertArrayNotHasKey($key, $this->actual);
+        } else {
+            a::assertArrayHasKey($key, $this->actual);
+        }
     }
 
     public function toBeInstanceOf($class)
     {
-        a::assertInstanceOf($class, $this->actual);
-    }
-
-    public function isNotInstanceOf($class)
-    {
-        a::assertNotInstanceOf($class, $this->actual);
+        if ($this->negate) {
+            a::assertNotInstanceOf($class, $this->actual);
+        } else {
+            a::assertInstanceOf($class, $this->actual);
+        }
     }
 
     public function toBeType($type)
     {
-        a::assertInternalType($type, $this->actual);
-    }
-
-    public function notInternalType($type)
-    {
-        a::assertNotInternalType($type, $this->actual);
+        if ($this->negate) {
+            a::assertNotInternalType($type, $this->actual);
+        } else {
+            a::assertInternalType($type, $this->actual);
+        }
     }
 
     public function toHaveProperty($attribute)
     {
-        if (is_string($attribute)) {
-            a::assertClassHasAttribute($attribute, $this->actual);
+        if (is_string($this->actual)) {
+            if ($this->negate) {
+                a::assertClassNotHasAttribute($attribute, $this->actual);
+            } else {
+                a::assertClassHasAttribute($attribute, $this->actual);
+            }
         } else {
-            a::assertObjectHasAttribute($attribute, $this->actual);
-        }
-    }
-
-    public function notHasAttribute($attribute)
-    {
-        if (is_string($attribute)) {
-            a::assertClassNotHasAttribute($attribute, $this->actual);
-        } else {
-            a::assertObjectNotHasAttribute($attribute, $this->actual);
+            if ($this->negate) {
+                a::assertObjectNotHasAttribute($attribute, $this->actual);
+            } else {
+                a::assertObjectHasAttribute($attribute, $this->actual);
+            }
         }
     }
 
     public function toHaveStaticProperty($attribute)
     {
-        a::assertClassHasStaticAttribute($attribute, $this->actual);
-    }
-
-    public function notHasStaticAttribute($attribute)
-    {
-        a::assertClassNotHasStaticAttribute($attribute, $this->actual);
+        if ($this->negate) {
+            a::assertClassNotHasStaticAttribute($attribute, $this->actual);
+        } else {
+            a::assertClassHasStaticAttribute($attribute, $this->actual);
+        }
     }
 
     public function toContainType($type)
     {
-        a::assertContainsOnly($type, $this->actual);
-    }
-
-    public function notContainsOnly($type, $isNativeType = null)
-    {
-        a::assertNotContainsOnly($type, $this->actual, $isNativeType);
+        if ($this->negate) {
+            a::assertNotContainsOnly($type, $this->actual);
+        } else {
+            a::assertContainsOnly($type, $this->actual);
+        }
     }
 
     public function toContainInstancesOf($class)
@@ -158,91 +181,89 @@ class Expect
 
     public function toHaveCount($count)
     {
-        a::assertCount($count, $this->actual);
+        if ($this->negate) {
+            a::assertNotCount($count, $this->actual);
+        } else {
+            a::assertCount($count, $this->actual);
+        }
     }
 
-    public function notCount($array)
-    {
-        a::assertNotCount($array, $this->actual);
-    }
-
-    public function equalXMLStructure($xml, $checkAttributes = false)
+    public function toHaveXmlStructure($xml, $checkAttributes = false)
     {
         a::assertEqualXMLStructure($xml, $this->actual, $checkAttributes);
     }
 
     public function toExist()
     {
-        a::assertFileExists($this->actual);
-    }
-
-    public function notExists()
-    {
-        a::assertFileNotExists($this->actual);
+        if ($this->negate) {
+            a::assertFileNotExists($this->actual);
+        } else {
+            a::assertFileExists($this->actual);
+        }
     }
 
     public function toMatchPattern($pattern)
     {
-        a::assertRegExp($pattern, $this->actual);
+        if ($this->negate) {
+            a::assertNotRegExp($pattern, $this->actual);
+        } else {
+            a::assertRegExp($pattern, $this->actual);
+        }
     }
 
     public function toMatchFormat($format)
     {
-        a::assertStringMatchesFormat($format, $this->actual);
-    }
-
-    public function notMatchesFormat($format)
-    {
-        a::assertStringNotMatchesFormat($format, $this->actual);
+        if ($this->negate) {
+            a::assertStringNotMatchesFormat($format, $this->actual);
+        } else {
+            a::assertStringMatchesFormat($format, $this->actual);
+        }
     }
 
     public function toBe($expected)
     {
-        a::assertSame($expected, $this->actual);
-    }
-
-    public function notSame($expected)
-    {
-        a::assertNotSame($expected, $this->actual);
+        if ($this->negate) {
+            a::assertNotSame($expected, $this->actual);
+        } else {
+            a::assertSame($expected, $this->actual);
+        }
     }
 
     public function toEndWith($suffix)
     {
-        a::assertStringEndsWith($suffix, $this->actual);
-    }
-
-    public function notEndsWith($suffix)
-    {
-        a::assertStringEndsNotWith($suffix, $this->actual);
+        if ($this->negate) {
+            a::assertStringEndsNotWith($suffix, $this->actual);
+        } else {
+            a::assertStringEndsWith($suffix, $this->actual);
+        }
     }
 
     public function toStartWith($prefix)
     {
-        a::assertStringStartsWith($prefix, $this->actual);
+        if ($this->negate) {
+            a::assertStringStartsNotWith($prefix, $this->actual);
+        } else {
+            a::assertStringStartsWith($prefix, $this->actual);
+        }
     }
 
-    public function notStartsWith($prefix)
+    public function toBeJson()
     {
-        a::assertStringStartsNotWith($prefix, $this->actual);
+        if ($this->negate) {
+            a::assertThat($this->actual, a::logicalAnd(a::isType('string'), a::logicalNot(a::isJson())));
+        } else {
+            a::assertJson($this->actual);
+        }
     }
 
-    public function toBeJSONFile()
+    public function toBeXml()
     {
-        a::assertJsonFileEqualsJsonFile($this->actual, $this->actual);
-    }
-
-    public function toBeJSONString()
-    {
-        a::assertJson($this->actual);
-    }
-
-    public function toBeXmlFile()
-    {
-        a::assertXmlFileEqualsXmlFile($this->actual, $this->actual);
-    }
-
-    public function toBeXmlString()
-    {
-        a::assertInstanceOf('DomDocument', PHPUnit_Util_XML::load($this->actual));
+        try {
+            PHPUnit_Util_XML::load($this->actual);
+        } catch(PHPUnit_Framework_Exception $e) {
+            if (!$this->negate) {
+                throw $e;
+            }
+        }
     }
 }
