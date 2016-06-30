@@ -6,7 +6,7 @@ class ExpectTest extends PHPUnit_Framework_TestCase
 {
     public function testExpectHelperFunction()
     {
-        $this->assertInstanceOf(Expect::class, expect('actual'));
+        $this->assertInstanceOf('\PSpec\Expect', expect('actual'));
     }
 
     public function testNot()
@@ -24,7 +24,7 @@ class ExpectTest extends PHPUnit_Framework_TestCase
     public function testNotIsFluent()
     {
         $subject = new Expect('actual');
-        $this->assertInstanceOf(Expect::class, $subject->not());
+        $this->assertInstanceOf('\PSpec\Expect', $subject->not());
     }
 
     public function testToEqual()
@@ -151,7 +151,7 @@ class ExpectTest extends PHPUnit_Framework_TestCase
 
     public function testToContainInstancesOf()
     {
-        expect(array(new Exception(), new Exception()))->toContainInstancesOf(Exception::class);
+        expect(array(new Exception(), new Exception()))->toContainInstancesOf('\Exception');
     }
 
     public function testToHaveCount()
