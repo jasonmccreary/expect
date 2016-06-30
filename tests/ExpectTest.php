@@ -1,9 +1,12 @@
 <?php
+namespace PSpec;
 
-include __DIR__.'/../src/Codeception/function.php';
-include __DIR__.'/../vendor/autoload.php';
+use DateTime;
+use DOMDocument;
+use DOMElement;
+use PHPUnit_Framework_TestCase;
 
-class VerifyTest extends PHPUnit_Framework_TestCase {
+class ExpectTest extends PHPUnit_Framework_TestCase {
 
     protected $xml;
 

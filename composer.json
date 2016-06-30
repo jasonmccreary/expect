@@ -11,6 +11,11 @@
         "phpunit/phpunit": "~4.0"
     },
     "autoload": {
-        "files": ["src/Codeception/function.php"]
+        "files": [
+            "src/functions.php"
+        ],
+        "psr-4": {
+            "PSpec\\": "src"
+        }
     }
 }

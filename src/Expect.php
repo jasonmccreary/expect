@@ -1,9 +1,9 @@
 <?php
-namespace Codeception;
+namespace PSpec;
 
 use PHPUnit_Framework_Assert as a;
 
-class Verify {
+class Expect {
 
     protected $actual = null;
     protected $description = '';
