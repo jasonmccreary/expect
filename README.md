@@ -1,6 +1,6 @@
 # Expect
 
-[![Build Status](https://travis-ci.org/jasonmccreary/expect.svg?branch=master)](https://travis-ci.org/jasonmccreary/expect) [![Latest Stable Version](https://poser.pugx.org/codeception/verify/v/stable.png)](https://packagist.org/packages/codeception/verify)
+[![Build Status](https://travis-ci.org/jasonmccreary/expect.svg?branch=master)](https://travis-ci.org/jasonmccreary/expect) [![Latest Stable Version](https://poser.pugx.org/jasonmccreary/expect/v/stable.png)](https://packagist.org/packages/jasonmccreary/expect)
 
 Expect is a BDD-style assertion library for PHP - allowing you to express expectations using a natural, fluent interface.
 

@@ -1,6 +1,8 @@
 {
     "name": "jasonmccreary/expect",
     "description": "BDD-style assertions for PHP.",
+    "keywords": ["bdd", "test", "assert", "matcher"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Jason McCreary",
