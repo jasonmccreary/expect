@@ -21,8 +21,6 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
         expect("hello")->equals("hello");
         expect(5)->equals(5);
         expect(3)->notEquals(5);
-//        verify_file(__FILE__)->equals(__FILE__);
-//        verify_file(__FILE__)->notEquals(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'composer.json');
     }
 
     public function testContains()
@@ -118,20 +116,19 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
 
     public function testFileExists()
     {
-//        expect_file(__FILE__)->exists();
-//        expect_file('completelyrandomfilename.txt')->notExists();
+        expect(__FILE__)->exists();
+        expect('completelyrandomfilename.txt')->notExists();
     }
 
     public function testEqualsJsonFile()
     {
-//        expect_file(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'json-test-file.json')
-//            ->equalsJsonFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'equal-json-test-file.json');
-        expect('{"some" : "data"}')->equalsJsonFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'equal-json-test-file.json');
+        expect(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'json-test-file.json')
+            ->equalsJsonFile();
     }
 
     public function testEqualsJsonString()
     {
-        expect('{"some" : "data"}')->equalsJsonString('{"some" : "data"}');
+        expect('{"some" : "data"}')->equalsJsonString();
     }
 
     public function testRegExp()
@@ -163,12 +160,6 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
         expect('A completely not funny string')->notEndsWith('A completely');
     }
 
-    public function testEqualsFile()
-    {
-        expect('%i')->equalsFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'format-file.txt');
-        expect('Another string')->notEqualsFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'format-file.txt');
-    }
-
     public function testStartsWith()
     {
         expect('A completely not funny string')->startsWith('A completely');
@@ -177,16 +168,13 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
 
     public function testEqualsXmlFile()
     {
-//        expect_file(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml')
-//            ->equalsXmlFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml');
-        expect('<foo><bar>Baz</bar><bar>Baz</bar></foo>')
-            ->equalsXmlFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml');
+        expect(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml')
+            ->equalsXmlFile();
     }
 
     public function testEqualsXmlString()
     {
-        expect('<foo><bar>Baz</bar><bar>Baz</bar></foo>')
-            ->equalsXmlString('<foo><bar>Baz</bar><bar>Baz</bar></foo>');
+        expect('<foo><bar>Baz</bar><bar>Baz</bar></foo>')->equalsXmlString();
     }
 }
 

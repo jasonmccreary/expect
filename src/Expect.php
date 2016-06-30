@@ -2,37 +2,25 @@
 namespace PSpec;
 
 use PHPUnit_Framework_Assert as a;
+use PHPUnit_Util_XML;
 
-class Expect {
+class Expect
+{
     protected $actual = null;
-    protected $isFileExpectation = false;
 
     public function __construct($actual)
     {
         $this->actual = $actual;
     }
 
-    public function setIsFileExpectation($isFileExpectation)
-    {
-        $this->isFileExpectation = $isFileExpectation;
-    }
-
     public function equals($expected)
     {
-        if ( ! $this->isFileExpectation ) {
-            a::assertEquals($expected, $this->actual);
-        } else {
-            a::assertFileEquals($expected, $this->actual);
-        }
+        a::assertEquals($expected, $this->actual);
     }
 
     public function notEquals($expected)
     {
-        if ( ! $this->isFileExpectation ) {
-            a::assertNotEquals($expected, $this->actual);
-        } else {
-            a::assertFileNotEquals($expected, $this->actual);
-        }
+        a::assertNotEquals($expected, $this->actual);
     }
 
     public function contains($needle)
@@ -153,12 +141,12 @@ class Expect {
         a::assertClassNotHasStaticAttribute($attribute, $this->actual);
     }
 
-    public function containsOnly($type, $isNativeType = NULL)
+    public function containsOnly($type, $isNativeType = null)
     {
         a::assertContainsOnly($type, $this->actual, $isNativeType);
     }
 
-    public function notContainsOnly($type, $isNativeType = NULL)
+    public function notContainsOnly($type, $isNativeType = null)
     {
         a::assertNotContainsOnly($type, $this->actual, $isNativeType);
     }
@@ -178,39 +166,19 @@ class Expect {
         a::assertNotCount($array, $this->actual);
     }
 
-    public function equalXMLStructure($xml, $checkAttributes = FALSE)
+    public function equalXMLStructure($xml, $checkAttributes = false)
     {
         a::assertEqualXMLStructure($xml, $this->actual, $checkAttributes);
     }
 
     public function exists()
     {
-        if (!$this->isFileExpectation ) {
-            throw new \Exception('exists() expectation should be called with expect_file()');
-        }
         a::assertFileExists($this->actual);
     }
 
     public function notExists()
     {
-        if (!$this->isFileExpectation ) {
-            throw new \Exception('notExists() expectation should be called with expect_file()');
-        }
         a::assertFileNotExists($this->actual);
-    }
-
-    public function equalsJsonFile($file)
-    {
-        if (!$this->isFileExpectation ) {
-            a::assertJsonStringEqualsJsonFile($file, $this->actual);
-        } else {
-            a::assertJsonFileEqualsJsonFile($file, $this->actual);
-        }
-    }
-
-    public function equalsJsonString($string)
-    {
-        a::assertJsonStringEqualsJsonString($string, $this->actual);
     }
 
     public function regExp($expression)
@@ -258,16 +226,6 @@ class Expect {
         a::assertStringEndsNotWith($suffix, $this->actual);
     }
 
-    public function equalsFile($file)
-    {
-        a::assertStringEqualsFile($file, $this->actual);
-    }
-
-    public function notEqualsFile($file)
-    {
-        a::assertStringNotEqualsFile($file, $this->actual);
-    }
-
     public function startsWith($prefix)
     {
         a::assertStringStartsWith($prefix, $this->actual);
@@ -278,17 +236,23 @@ class Expect {
         a::assertStringStartsNotWith($prefix, $this->actual);
     }
 
-    public function equalsXmlFile($file)
+    public function equalsJsonFile()
     {
-        if (!$this->isFileExpectation ) {
-            a::assertXmlStringEqualsXmlFile($file, $this->actual);
-        } else {
-            a::assertXmlFileEqualsXmlFile($file, $this->actual);
-        }
+        a::assertJsonFileEqualsJsonFile($this->actual, $this->actual);
     }
 
-    public function equalsXmlString($xmlString)
+    public function equalsJsonString()
     {
-        a::assertXmlStringEqualsXmlString($xmlString, $this->actual);
+        a::assertJson($this->actual);
+    }
+
+    public function equalsXmlFile()
+    {
+        a::assertXmlFileEqualsXmlFile($this->actual, $this->actual);
+    }
+
+    public function equalsXmlString()
+    {
+        a::assertInstanceOf('DomDocument', PHPUnit_Util_XML::load($this->actual));
     }
 }
