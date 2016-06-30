@@ -17,65 +17,44 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
     }
     public function testEquals()
     {
-        verify(5)->equals(5);
-        verify("hello")->equals("hello");
-        verify("user have 5 posts", 5)->equals(5);
-        verify(3)->notEquals(5);
-        verify_file(__FILE__)->equals(__FILE__);
-        verify_file(__FILE__)->notEquals(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'composer.json');
+        expect(5)->equals(5);
+        expect("hello")->equals("hello");
+        expect(5)->equals(5);
+        expect(3)->notEquals(5);
+//        verify_file(__FILE__)->equals(__FILE__);
+//        verify_file(__FILE__)->notEquals(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'composer.json');
     }
 
     public function testContains()
     {
-        verify(array(3, 2))->contains(3);
-        verify("user have 5 posts", array(3, 2))->notContains(5);
+        expect(array(3, 2))->contains(3);
+        expect(array(3, 2))->notContains(5);
     }
 
     public function testGreaterLowerThan()
     {
-        verify(7)->greaterThan(5);
-        verify(7)->lessThan(10);
-        verify(7)->lessOrEquals(7);
-        verify(7)->lessOrEquals(8);
-        verify(7)->greaterOrEquals(7);
-        verify(7)->greaterOrEquals(5);
+        expect(7)->greaterThan(5);
+        expect(7)->lessThan(10);
+        expect(7)->lessOrEquals(7);
+        expect(7)->lessOrEquals(8);
+        expect(7)->greaterOrEquals(7);
+        expect(7)->greaterOrEquals(5);
     }
 
     public function testTrueFalseNull()
     {
-        verify(true)->true();
-        verify(false)->false();
-        verify(null)->null();
-        verify(true)->notNull();
-        verify('something should be false', false)->false();
-        verify('something should be true', true)->true();
+        expect(true)->true();
+        expect(false)->false();
+        expect(null)->null();
+        expect(true)->notNull();
+        expect(false)->false();
+        expect(true)->true();
     }
 
     public function testEmptyNotEmpty()
     {
-        verify(array('3', '5'))->notEmpty();
-        verify(array())->isEmpty();
-    }
-
-    public function testVerifyThat()
-    {
-        verify_that(12);
-        verify_that('hello world');
-        verify_that(array('hello'));
-    }
-
-    public function testVerifyNot()
-    {
-        verify_not(false);
-        verify_not(null);
-        verify_not(array());
-    }
-
-    public function testExpectFunctions()
-    {
-        expect(12)->equals(12);
-        expect_that(true);
-        expect_not(false);
+        expect(array('3', '5'))->notEmpty();
+        expect(array())->isEmpty();
     }
 
     public function testArrayHasKey()
@@ -107,8 +86,8 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
 
     public function testHasStaticAttribute()
     {
-        expect('FakeClassForTesting')->hasStaticAttribute('staticProperty');
-        expect('FakeClassForTesting')->notHasStaticAttribute('fakeProperty');
+        expect(\PSpec\FakeClassForTesting::class)->hasStaticAttribute('staticProperty');
+        expect(\PSpec\FakeClassForTesting::class)->notHasStaticAttribute('fakeProperty');
     }
 
     public function testContainsOnly()
@@ -120,7 +99,7 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
     public function testContainsOnlyInstancesOf()
     {
         expect(array(new FakeClassForTesting(), new FakeClassForTesting(), new FakeClassForTesting()))
-            ->containsOnlyInstancesOf('FakeClassForTesting');
+            ->containsOnlyInstancesOf(\PSpec\FakeClassForTesting::class);
     }
 
     public function testCount()
@@ -139,14 +118,14 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
 
     public function testFileExists()
     {
-        expect_file(__FILE__)->exists();
-        expect_file('completelyrandomfilename.txt')->notExists();
+//        expect_file(__FILE__)->exists();
+//        expect_file('completelyrandomfilename.txt')->notExists();
     }
 
     public function testEqualsJsonFile()
     {
-        expect_file(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'json-test-file.json')
-            ->equalsJsonFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'equal-json-test-file.json');
+//        expect_file(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'json-test-file.json')
+//            ->equalsJsonFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'equal-json-test-file.json');
         expect('{"some" : "data"}')->equalsJsonFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'equal-json-test-file.json');
     }
 
@@ -198,8 +177,8 @@ class ExpectTest extends PHPUnit_Framework_TestCase {
 
     public function testEqualsXmlFile()
     {
-        expect_file(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml')
-            ->equalsXmlFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml');
+//        expect_file(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml')
+//            ->equalsXmlFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml');
         expect('<foo><bar>Baz</bar><bar>Baz</bar></foo>')
             ->equalsXmlFile(__DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'xml-test-file.xml');
     }
